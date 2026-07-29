@@ -39,11 +39,11 @@ jobs:
 
       # Copy executable into website repo
       - name: Copy executable
-        run: cp c-ssg/c-ssg .
+        run: cp c-ssg/c-ssg ./cssg-bin
 
       # Generate the website
       - name: Generate site
-        run: ./c-ssg
+        run: ./cssg-bin
 
       # Upload generated site
       - name: Upload artifact
