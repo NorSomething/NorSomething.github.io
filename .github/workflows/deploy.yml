@@ -27,7 +27,7 @@ jobs:
       - name: Checkout c-ssg
         uses: actions/checkout@v4
         with:
-          repository: YOUR_GITHUB_USERNAME/c-ssg
+          repository: NorSomething/c-ssg
           path: c-ssg
 
       # Build c-ssg
