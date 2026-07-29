@@ -1,0 +1,65 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout website repository
+      - name: Checkout website
+        uses: actions/checkout@v4
+
+      # Checkout c-ssg repository
+      - name: Checkout c-ssg
+        uses: actions/checkout@v4
+        with:
+          repository: YOUR_GITHUB_USERNAME/c-ssg
+          path: c-ssg
+
+      # Build c-ssg
+      - name: Build c-ssg
+        run: make -C c-ssg
+
+      # Copy executable into website repo
+      - name: Copy executable
+        run: cp c-ssg/c-ssg .
+
+      # Generate the website
+      - name: Generate site
+        run: ./c-ssg
+
+      # Upload generated site
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: htmlfiles
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
