@@ -30,6 +30,9 @@ jobs:
           repository: NorSomething/c-ssg
           path: c-ssg
 
+      - name: Debug - list c-ssg contents
+        run: ls -la c-ssg
+
       # Build c-ssg
       - name: Build c-ssg
         run: make -C c-ssg
