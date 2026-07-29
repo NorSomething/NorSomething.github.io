@@ -33,6 +33,11 @@ jobs:
       - name: Debug - list c-ssg contents
         run: ls -la c-ssg
 
+      - name: Generate site
+        run: |
+        mkdir -p htmlfiles
+      ./cssg-bin
+
       # Build c-ssg
       - name: Build c-ssg
         run: make -C c-ssg
