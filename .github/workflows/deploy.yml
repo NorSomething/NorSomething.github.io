@@ -34,6 +34,7 @@ jobs:
       # Generate the website
       - name: Generate site
         run: |
+          rm -rf htmlfiles
           mkdir -p htmlfiles
           ./cssg-bin
       # Upload generated site
