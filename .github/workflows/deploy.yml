@@ -37,6 +37,12 @@ jobs:
           rm -rf htmlfiles
           mkdir -p htmlfiles
           ./cssg-bin
+      # Copy static assets into the output folder
+      - name: Copy static assets
+        run: |
+          cp -r cssfiles htmlfiles/
+          cp -r site-imgs htmlfiles/
+          cp resume.pdf htmlfiles/ 2>/dev/null || true
       # Upload generated site
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
