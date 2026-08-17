@@ -4,7 +4,7 @@ title : home
 
 # You have my ear, citizen.
 
-Hello there! I am Nirmal, an engineering undergrad from PESU, usually going by `nirmal` or `NorSomething` on the internet. 
+Hello there!! I am Nirmal, an engineering undergrad from PESU, usually going by `nirmal` or `NorSomething` on the internet. 
 I am very passionate about computers, operating systems, linux and what photography my trademark chinese gaming phone has to offer.
 
 ~img=me.png~
