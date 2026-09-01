@@ -97,6 +97,8 @@ I have this tiny [**bash script**](https://github.com/NorSomething/nock/blob/mai
 
 # Basic Working
 Now, lets see what my nock actually does when you run it! Here is where I tell you about my XCB stuff.
+~vid=vid.mp4~
+> Smol demo!
 
 ## Setup 
 We first need to connect to the X sever and grab the current screen. This is probably the most standard first steps for any XCB related program.
