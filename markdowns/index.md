@@ -1,5 +1,8 @@
 ---
 title : home
+discord : nitmal.
+resume : https://drive.google.com/file/d/1c4p-lktpWlpGsrK-MSB7-oVEcOXG841Z/view?usp=sharing
+github: https://github.com/NorSomething
 ---
 
 # You have my ear, citizen.

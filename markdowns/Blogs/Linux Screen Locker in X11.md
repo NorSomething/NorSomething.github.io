@@ -1,6 +1,7 @@
 ---
 title: nock
 tags: C, XCB, PAM
+blog : norsomething.github.io/Blogs
 ---
 
 # Nock

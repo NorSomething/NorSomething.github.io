@@ -1,3 +1,8 @@
+---
+title: projects
+github: https://github.com/NorSomething
+---
+
 > Some of my projects
 
 # Nock : X11 lockscreen app
