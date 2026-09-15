@@ -23,4 +23,4 @@ On a rainy thursday evening, spin *3.5* times counterclock-wise and talk shit ab
 I am always online on my discord : `nitmal.`.
 
 You can also [shoot me an email](mailto:mcnirmalkumar00@gmail.com)!
-Reach me out [on LinkedIn](www.linkedin.com/in/nirmal-kumar-651491382) too!
+Reach me out [on LinkedIn](https://www.linkedin.com/in/nirmal-kumar-651491382) too!
