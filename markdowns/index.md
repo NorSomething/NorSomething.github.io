@@ -1,7 +1,7 @@
 ---
 title : home
 discord : nitmal.
-resume : https://drive.google.com/file/d/1c4p-lktpWlpGsrK-MSB7-oVEcOXG841Z/view?usp=sharing
+resume : https://drive.google.com/file/d/1rzPVRycvY08r1fV7vxPfRxoKMVsPeiUT/view?usp=drive_link
 github: https://github.com/NorSomething
 ---
 
