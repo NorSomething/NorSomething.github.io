@@ -36,7 +36,8 @@ jobs:
         run: |
           rm -rf htmlfiles
           mkdir -p htmlfiles
-          ./cssg-bin
+          TIMESTAMP="$(date -u '+%Y-%m-%d %H:%M UTC')"
+          ./cssg-bin --updated-at "$TIMESTAMP"
       # Copy static assets into the output folder
       - name: Copy static assets
         run: |
