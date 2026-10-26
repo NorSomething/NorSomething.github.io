@@ -14,11 +14,15 @@ To do this, I needed to implement one of the [core PAM functions](https://www.li
 ~img=nock.png~
 > my nock in action!
 
+---
+
 ## Tech Stack
 - C 
 - XCB 
 - PAM
 - Other POSIX APIs
+
+---
 
 ## Why this Tech Stack?
 So **what** exactly do you need to have a functioning lock screen? Well mainly two things - a way for the user to see your lockscreen, and a way for your app to do the actual locking mechanism. 
@@ -43,6 +47,8 @@ Thats honestly the only reason I chose XCB over Xlib here for this project. XCB 
 
 ### User Auth in Linux
 Okay now we have our UI library, let's now find a way to actually authenticate the user password. Here, we don't really have the burden of choice as there is only one way to authenticate user passwords in Linux - PAM. So we go with that!
+
+---
 
 ## Technical Background - PAM 
 Majority of this section would be exploring what PAM is and how it user account authentication works in Linux.
@@ -96,6 +102,8 @@ You also might have noticed this `system-local-login` thingy in our pam file. Wh
 
 I have this tiny [**bash script**](https://github.com/NorSomething/nock/blob/main/install.sh) for my app that does the entire writing your PAM file for you!
 
+--
+
 # Basic Working
 Now, lets see what my nock actually does when you run it! Here is where I tell you about my XCB stuff.
 ~vid=vid.mp4~
@@ -110,11 +118,15 @@ xcb_key_symbols_t *syms = xcb_key_symbols_alloc(connection);
 ```
 Here, the `xcb_key_symbols_t` type is super important as it allows us to convert raw keycode inputs from the keyboard into actual readble key strokes. For example, it can convert something like a keycode of `38` into `XK_a`.
 
+---
+
 ## Making the lockscreen cover the entire screen
 XCB gives us a `create_window()` function which.. creates a new window! (*no way!*). But to make it go fullscreen we do some neat trickery. Instead of making the window huge, this function tells the window manager to treat it as fullscreen via the [`EWMH protocol`](https://specifications.freedesktop.org/wm/1.5/). We use the `_NET_WM_STATE_FULLSCREEN` property here to achieve this.
 ```
 xcb_change_property(connection, XCB_PROP_MODE_REPLACE, window, state_reply->atom, XCB_ATOM_ATOM, 32, 1, &fs_reply->atom);
 ```
+
+---
 
 ## Redirection of input to the window
 As mentioned before, we need to make it such that all the input entered by the user goes inside our lockscreen app. For this we have a really neat function called `xcb_grab_keyboard`, which does exactly what's written on its tin. 
@@ -122,6 +134,8 @@ As mentioned before, we need to make it such that all the input entered by the u
 xcb_grab_keyboard(connection, 0, screen->root, XCB_CURRENT_TIME, XCB_GRAB_MODE_ASYNC, XCB_GRAB_MODE_ASYNC);
 ```
 > This is also what makes our XCB window an actual lockscreen, rather than just another GUI window.
+
+---
 
 ## The general event loop
 Like every UI app, everything boils down to one `while(true)` loop. This is what my lockscreen does as well. There is one while loop where I have a **blocking** `xcb_wait_forevent()` function, which in this lockscreen app, waits for a specific set of events:
@@ -132,9 +146,13 @@ Like every UI app, everything boils down to one `while(true)` loop. This is what
 
 > There is also an `XCB_KEY_RELEASE` which is present to check keycode 9, which is Escape. It is just for testing purposes, which when triggered, just exits the app.
 
+---
+
 ## The Password checking
 As mentioned above, I have an `auth_user()` function which is where my custom PAM conversation from before hands back whatever the user typed into the GUI as the **"response"**. This is then checked by PAM against the real password hash for that user, and the my auth function returns 1 or 0 depending on the result. 
 This true or false return is used by my UI parts of the code to decide whether to show "Access Granted" and exit, or to clear all buffers and let the user try again. 
+
+---
 
 # Limitations and Conclusion
 `nock` works, but it is a very crude implementation of a lockscreen and has some glaring flaws lol.
@@ -152,3 +170,5 @@ It is still a **really** cool project imho, especially the PAM part, hence the b
 #### Always feel free to contribute to the project on [Github!](https://github.com/NorSomething/nock).
 
 *until next time, baii!*
+
+---
