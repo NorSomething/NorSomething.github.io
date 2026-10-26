@@ -102,7 +102,7 @@ You also might have noticed this `system-local-login` thingy in our pam file. Wh
 
 I have this tiny [**bash script**](https://github.com/NorSomething/nock/blob/main/install.sh) for my app that does the entire writing your PAM file for you!
 
---
+---
 
 # Basic Working
 Now, lets see what my nock actually does when you run it! Here is where I tell you about my XCB stuff.
