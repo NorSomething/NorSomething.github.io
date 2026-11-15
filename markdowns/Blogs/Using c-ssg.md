@@ -4,30 +4,50 @@ tags: C, Markdown, Static Sites
 github: https://github.com/NorSomething/c-ssg
 ---
 
-# Using c-ssg to build this site
+# c-ssg
+> A tiny, very opinionated static-site generator written in C, mostly because I was bored and thought it would be funny.
 
-I wrote `c-ssg` because I was simply bored. It all started from a conversation about having a personal site and what static site generator to use. Anna and Hugo were my first picks but then the thought of me just making one myself came about; and what better langauge to build it on but **C**!
+## Prelude
+One day I was talking about making a personal website and, naturally, the question of what static-site generator to use came up. Anna and Hugo were my first picks, but then I had the very sensible thought: *what if I just made one myself?*
 
-I picked C for this ssg because its funny XD 
-> The idea was to build an ssg without using any external libraries for markdown parsing and such. Just the *holy* C standard library and other POSIX headers. 
+And what better language to build any personal project than **C** - lord's own programming language.
 
-### What started as a simple pipeline that eats markdowns and spits out html files.. soon became this very opionated static site generator which I personally deem good enough to use it for my on site!
+> The original idea was simple: make an SSG without pulling in a Markdown library or a big framework. Just the *holy* C standard library and a few POSIX headers.
 
 ---
 
-## The folders you work in
+## Tech Stack
 
-- `markdowns/` contains the pages you write.
-- `markdowns/Blogs/` is a nested section. Each Markdown file becomes a page, and c-ssg also creates a `Blogs.html` page that lists them.
-- `site-imgs/` contains images and videos referenced by your Markdown.
-- `cssfiles/styles.css` is shared by every generated page.
-- `htmlfiles/` is generated output. Edit the Markdown and source assets, then regenerate the HTML.
+- C
+- The C standard library
+- POSIX APIs
+- Markdown
+- HTML and CSS
+- GitHub Actions and GitHub Pages
 
-The generator reads these paths relative to the current working directory. Run it from the root of the website repo.
+---
 
-## Write a page
+## Why C?
 
-Create a Markdown file, for example `markdowns/about.md`:
+Literally no reason other than it being funny. It was indeed fun to torture myself with markdown parsing using the C standard library :)
+
+---
+
+## Technical Background - the site layout
+
+The generator works with a small, predictable folder layout:
+
+1. `markdowns/` contains the pages I write.
+2. `markdowns/Blogs/` is a nested section. Every Markdown file inside becomes a page, and c-ssg also makes a `Blogs.html` page that lists them.
+3. `site-imgs/` contains images and videos used by the Markdown files.
+4. `cssfiles/styles.css` is the shared stylesheet.
+5. `htmlfiles/` is generated output. I do not edit files in there by hand.
+
+The paths are read relative to the website repository root, so the generator should be run from there. The basic rule is simple: write Markdown and add source assets; let c-ssg create the HTML.
+
+### Front matter
+
+Pages can start with a tiny front-matter block:
 
 ```
 ---
@@ -35,30 +55,64 @@ title: About me
 tags: personal, notes
 GitHub: https://github.com/NorSomething
 ---
-
-# About me
-
-This is **my page**. Here is a [link](https://example.com).
 ```
 
-Front matter is optional, but it must begin at the very top of the file and use `---` on its own line to open and close. `title` sets the browser tab title. `tags` accepts comma-separated values; on section listing pages those tags appear beside the page and can be searched. Any other metadata entry becomes a link in that page's footer, so use a full URL for its value.
+The block is optional, but if it is used, it must start at the very top of the file and be opened and closed by `---` on its own line. `title` becomes the browser-tab title and `tags` are comma-separated values used and searchable on section listing pages. Other metadata values become links in the page footer, so they should be full URLs.
 
-The Markdown support is intentionally small: headings, paragraphs, unordered lists, bold and italic text, fenced code blocks, links, checkboxes, blockquotes, and horizontal rules. It is not a full CommonMark implementation. Ordered lists and tables are not supported yet.
+### Images and videos
 
-## Add images and videos
-
-Put an asset in `site-imgs/`, then reference its filename in Markdown:
+Media stays in the top-level `site-imgs/` directory and is referenced by filename:
 
 ```
 ~img=portrait.png~
 ~vid=demo.mp4~
 ```
 
-The filename must match exactly. The generator emits paths that work on pages inside a nested folder as well as root pages, so keep the media files in the top-level `site-imgs/` directory.
+Keeping the assets in one place lets the generated paths work for both root-level pages and pages inside folders such as `Blogs/`.
 
-## Build and preview
+---
 
-From the website root, build the generator and generate the pages:
+# Basic Working
+
+*cue insane hype aura edit of static sites getting generated*
+
+## Reading the Markdown
+
+For every Markdown file, c-ssg reads the optional front matter first and then handles the rest of the file as page content. It turns the small supported Markdown syntax into HTML and wraps it in the common page layout.
+
+For example, a page like this:
+
+```
+# About me
+
+This is **my page**. Here is a [link](https://example.com).
+```
+
+becomes a proper HTML page without me having to rewrite the header, navigation, footer, or basic markup every time.
+
+---
+
+## Generating navigation and listings
+
+The generator also looks at the Markdown directory structure. Root-level files become normal pages, while a directory such as `Blogs/` becomes its own listing page. That listing page shows the generated posts and the tags read from their front matter.
+
+This is what powers the top bar too: it contains links to the generated pages and names of the folders inside `markdowns/`. Clicking a directory gives a clean list of the HTML files generated from that directory.
+
+---
+
+## The bottom bar
+
+Every generated page gets a footer with three regions:
+
+1. The **left** always says `make with love using c-ssg` because I need the publicity :p
+2. The **center** shows the last-updated time in UTC. During deployment, that comes from the GitHub Actions build time.
+3. The **right** is populated from the additional front-matter links, so a page can point to its GitHub repository or anything else relevant.
+
+---
+
+## Building and publishing
+
+From the website root, I build c-ssg, run it, and copy the shared assets into the generated site:
 
 ```
 make -C ../C/c-ssg
@@ -67,34 +121,24 @@ cp -r cssfiles htmlfiles/
 cp -r site-imgs htmlfiles/
 ```
 
-Open up any of the html files and you'll see the page!!
+After that, opening any file in `htmlfiles/` is enough to preview the site locally.
 
-You will also notice the top and bottom bars that have been spawned automatically. 
-
-### Top Bar
-The top bar basically contains all the sites generated from the markdown files along with the names of the folders inside the `markdown` files directory.
-
-The directory option in the top bar upon clicking: cleanly lists all the generated html files inside that directory along with their tags taken from their frontmatter.
-
-### Bottom Bar
-The bottom bar has three main fields: the left, the right and the center.
-
-The **center** is always occupied by the *last updated time* in UTC. This is taken directly from github action's build time while generating the actual site.
-
-The **left** and **right** are customisable *(kinda)*.
-
-Each entry of the **right** region is customizable via the frontmatter. You can add links and names for whatever you want down there!
-
-The **left** region always says `make with love using c-ssg` cuz I need dat publicity :p
-
----
-
-## Publishing and Conclusion
-
-This site's GitHub Actions workflow checks out the `c-ssg` repository, builds it, generates the pages, copies the CSS and media, and publishes `htmlfiles/` to GitHub Pages whenever `main` is updated. For your own site, update the checkout path in the script or set `CSSG_DIR` to wherever you cloned the generator.
+For the actual site, a GitHub Actions workflow does the same loop whenever `main` is updated: it checks out c-ssg, builds it, generates the pages, copies the CSS and media, and publishes `htmlfiles/` to GitHub Pages. For another site, update the checkout path in the workflow or set `CSSG_DIR` to the location where c-ssg was cloned.
 
 > Check out the entire `deploy.yml` [here!](https://github.com/NorSomething/NorSomething.github.io/blob/main/.github/workflows/deploy.yml)
 
-That is the whole loop: write markdown, add any assets, preview, and push.
+---
 
-And as always feel free to always checkout and contribute to the [repo](https://github.com/NorSomething/cssg)!
+# Limitations and Conclusion
+
+`c-ssg` works nicely for this site, but it is deliberately tiny and has some very obvious limitations lol.
+
+1. There is no support for *all* of markdown features just yet. I only made c-ssg support a handful of features that I thought I would need in a personal site. Hopefully one day I'll have more support and maybe even full GH Markdown support.
+
+2. The entire flow of this ssg is **very** rigid. The next steps should probably be my lazy ass working on proper templating support.
+
+I hope I get time to keep polishing it and maybe make it useful for more than just my own little corner of the internet.
+
+#### Always feel free to contribute to the project on [Github!](https://github.com/NorSomething/c-ssg)
+
+*until next time, baii!*
